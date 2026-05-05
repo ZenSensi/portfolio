@@ -10,6 +10,8 @@ const Linkedin = ({ size = 24 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
 );
 import './App.css';
+import { cn } from "@/lib/utils";
+import { GridPattern } from "@/components/ui/grid-pattern";
 import { CardBody, CardContainer, CardItem } from "./components/ui/3d-card-effect";
 import Loader from "./components/ui/3d-box-loader-animation";
 
@@ -117,6 +119,26 @@ const Hero = () => {
   return (
     <section className="hero container">
       <div className="scanlines" />
+      <GridPattern
+        squares={[
+          [4, 4],
+          [5, 1],
+          [8, 2],
+          [5, 3],
+          [5, 5],
+          [10, 10],
+          [12, 15],
+          [15, 10],
+          [10, 15],
+          [15, 10],
+          [10, 15],
+          [15, 10],
+        ]}
+        className={cn(
+          "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
+          "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 opacity-40",
+        )}
+      />
       <div className="hero-content">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}

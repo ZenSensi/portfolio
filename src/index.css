@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;700;900&family=Outfit:wght@300;400;500;600;700&family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
+::selection {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
 :root {
   --primary: #FEF7F0;
   --secondary: #000000;
@@ -54,7 +59,8 @@ ul {
 .custom-cursor {
   width: 12px;
   height: 12px;
-  background-color: var(--secondary);
+  background-color: #fff;
+  mix-blend-mode: difference;
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
@@ -64,8 +70,6 @@ ul {
 
 .custom-cursor.hovering {
   transform: scale(6);
-  mix-blend-mode: difference;
-  background-color: #fff;
 }
 
 /* Glassmorphism */
