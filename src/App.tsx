@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Code, Palette, Layout, ArrowUpRight } from 'lucide-react';
+import { Routes, Route, Link } from 'react-router-dom';
 
 const Github = ({ size = 24 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
@@ -14,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { CardBody, CardContainer, CardItem } from "./components/ui/3d-card-effect";
 import Loader from "./components/ui/3d-box-loader-animation";
+import { ButtonColorful } from "./components/ui/button-colorful";
 
 // Custom Cursor Component
 const CustomCursor = () => {
@@ -53,19 +55,38 @@ const CustomCursor = () => {
 // Navbar Component
 const Navbar = () => (
   <nav className="navbar container">
-    <div className="logo outfit">AK.</div>
+    <Link to="/" className="logo outfit interactive">AK.</Link>
     <div className="nav-links">
-      <a href="#projects" className="interactive">Projects</a>
-      <a href="#about" className="interactive">About</a>
-      <div className="hubrave-pill interactive">Hubrave Agency</div>
+      <a href="/#projects" className="interactive">Projects</a>
+      <a href="/#about" className="interactive">About</a>
+      <Link to="/news" className="interactive">News</Link>
+      <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="interactive">Agency</a>
+      <a href="https://cal.com/hubrave/meeting" target="_blank" rel="noopener noreferrer" className="interactive">
+        <ButtonColorful label="Hire me" className="h-9 px-4 text-xs" />
+      </a>
     </div>
   </nav>
 );
+
+const dailyQuotes = [
+  { text: "Design is not just what it looks like and feels like. Design is how it works.", author: "Steve Jobs" },
+  { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
+  { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
+  { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+  { text: "Make it work, make it right, make it fast.", author: "Kent Beck" },
+  { text: "Good design is obvious. Great design is transparent.", author: "Joe Sparano" },
+  { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" }
+];
 
 // Hero Component
 const Hero = () => {
   const [displayText, setDisplayText] = useState('Arnabh Kushwaha');
   const [phase, setPhase] = useState(0);
+  const [quote, setQuote] = useState(dailyQuotes[0]);
+
+  useEffect(() => {
+    setQuote(dailyQuotes[Math.floor(Math.random() * dailyQuotes.length)]);
+  }, []);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
@@ -156,6 +177,27 @@ const Hero = () => {
         >
           Web Developer, Designer & UX/UI Specialist. Building the next generation of digital experiences.
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="daily-quote-section"
+        >
+          <p className="quote-text">"{quote.text}"</p>
+          <p className="quote-author">— {quote.author}</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+          className="mt-8 flex justify-center"
+        >
+          <a href="https://cal.com/hubrave/meeting" target="_blank" rel="noopener noreferrer" className="interactive">
+            <ButtonColorful label="Hire me" className="h-12 px-8 text-lg" />
+          </a>
+        </motion.div>
       </div>
     </section>
   );
@@ -167,8 +209,8 @@ const HubraveSection = () => (
     <div className="container">
       <div className="hubrave-card">
         <div className="hubrave-header">
-          <p className="outfit">The Future of Product</p>
-          <h2 className="outfit">Hubrave Agency</h2>
+          <p className="outfit">Provide Web related Services</p>
+          <h2 className="outfit">Founder of Hubrave Agency</h2>
           <div className="hubrave-stats">
             <div className="stat"><span>8+</span> Projects</div>
             <div className="stat"><span>AI</span> Driven</div>
@@ -176,7 +218,9 @@ const HubraveSection = () => (
         </div>
         <div className="hubrave-body">
           <p>A tech-driven agency focused on building and optimizing digital products for businesses. We bridge the gap between Data Science and premium UX.</p>
-          <a href="#" className="hubrave-btn interactive">Explore Solutions <ArrowUpRight size={20} /></a>
+          <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="interactive inline-block">
+            <ButtonColorful label="Explore" className="h-12 px-8" />
+          </a>
         </div>
       </div>
     </div>
@@ -253,6 +297,100 @@ const About = () => (
   </section>
 );
 
+// Newsletter Section
+interface NewsItem {
+  id: string;
+  date: string;
+  title: string;
+  url: string;
+}
+
+const Newsletter = () => {
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [loadingNews, setLoadingNews] = useState(true);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        // Fetching latest AI & Tech news from Hacker News API (Free, Open Source, No Key Required)
+        const response = await fetch('https://hn.algolia.com/api/v1/search_by_date?query=artificial+intelligence&tags=story&hitsPerPage=4');
+        const data = await response.json();
+        const formattedNews = data.hits.map((hit: any) => ({
+          id: hit.objectID,
+          date: new Date(hit.created_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+          title: hit.title,
+          url: hit.url || `https://news.ycombinator.com/item?id=${hit.objectID}`,
+        }));
+        setNewsItems(formattedNews);
+      } catch (error) {
+        console.error("Failed to fetch news", error);
+      } finally {
+        setLoadingNews(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      setSubscribed(true);
+      setEmail('');
+      setTimeout(() => setSubscribed(false), 3000);
+    }
+  };
+
+  return (
+    <section id="news" className="section-padding container">
+      <div style={{ marginBottom: '4rem', paddingBottom: '2rem', borderBottom: '1px solid rgba(0,0,0,0.1)', textAlign: 'center' }}>
+        <h1 className="outfit" style={{ fontSize: 'clamp(4rem, 8vw, 6rem)', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, lineHeight: 1 }}>NEWS</h1>
+      </div>
+      <div className="newsletter-grid">
+        <div className="news-content">
+          <p className="outfit section-subtitle">Daily Updates</p>
+          <h2 className="outfit section-title">Latest AI & Tech News</h2>
+          <div className="news-list">
+            {loadingNews ? (
+              <p>Loading latest news...</p>
+            ) : (
+              newsItems.map((news) => (
+                <a href={news.url} target="_blank" rel="noopener noreferrer" key={news.id} className="news-item block interactive" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <span className="news-date">{news.date}</span>
+                  <h3 className="news-title flex items-center gap-2" style={{ marginTop: '0.5rem', marginBottom: '0' }}>
+                    {news.title} <ArrowUpRight size={16} />
+                  </h3>
+                </a>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="subscribe-box glass">
+          <h3 className="outfit">Stay Updated</h3>
+          <p>Subscribe to the newsletter to get daily news, articles, and product updates delivered straight to your inbox.</p>
+          <form onSubmit={handleSubscribe} className="subscribe-form">
+            <input
+              type="email"
+              placeholder="Your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="subscribe-input interactive"
+            />
+            <button type="submit" className="subscribe-btn interactive">
+              {subscribed ? 'Subscribed!' : 'Subscribe'}
+            </button>
+          </form>
+          {subscribed && <p className="success-msg">Thank you! You're now subscribed to the newsletter.</p>}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 // Footer
 const Footer = () => (
   <footer className="footer container">
@@ -261,6 +399,21 @@ const Footer = () => (
       <p>&copy; 2026 Arnabh Kushwaha. Built with Skills.</p>
     </div>
   </footer>
+);
+
+const Home = () => (
+  <>
+    <Hero />
+    <HubraveSection />
+    <Projects />
+    <About />
+  </>
+);
+
+const NewsPage = () => (
+  <div style={{ paddingTop: '50px', minHeight: '80vh' }}>
+    <Newsletter />
+  </div>
 );
 
 function App() {
@@ -296,10 +449,10 @@ function App() {
         >
           <CustomCursor />
           <Navbar />
-          <Hero />
-          <HubraveSection />
-          <Projects />
-          <About />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/news" element={<NewsPage />} />
+          </Routes>
           <Footer />
         </motion.div>
       )}
