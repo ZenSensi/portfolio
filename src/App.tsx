@@ -15,7 +15,6 @@ import { cn } from "@/lib/utils";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { CardBody, CardContainer, CardItem } from "./components/ui/3d-card-effect";
 import Loader from "./components/ui/3d-box-loader-animation";
-import { ButtonColorful } from "./components/ui/button-colorful";
 
 // Custom Cursor Component
 const CustomCursor = () => {
@@ -60,10 +59,7 @@ const Navbar = () => (
       <a href="/#projects" className="interactive">Projects</a>
       <a href="/#about" className="interactive">About</a>
       <Link to="/news" className="interactive">News</Link>
-      <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="interactive">Agency</a>
-      <a href="https://cal.com/hubrave/meeting" target="_blank" rel="noopener noreferrer" className="interactive">
-        <ButtonColorful label="Hire me" className="h-9 px-4 text-xs" />
-      </a>
+      <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="hubrave-pill interactive">Hubrave Agency</a>
     </div>
   </nav>
 );
@@ -151,9 +147,9 @@ const Hero = () => {
           [12, 15],
           [15, 10],
           [10, 15],
-          [11, 11],
-          [14, 14],
-          [16, 12],
+          [15, 10],
+          [10, 15],
+          [15, 10],
         ]}
         className={cn(
           "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
@@ -187,17 +183,6 @@ const Hero = () => {
           <p className="quote-text">"{quote.text}"</p>
           <p className="quote-author">— {quote.author}</p>
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-8 flex justify-center"
-        >
-          <a href="https://cal.com/hubrave/meeting" target="_blank" rel="noopener noreferrer" className="interactive">
-            <ButtonColorful label="Hire me" className="h-12 px-8 text-lg" />
-          </a>
-        </motion.div>
       </div>
     </section>
   );
@@ -210,7 +195,7 @@ const HubraveSection = () => (
       <div className="hubrave-card">
         <div className="hubrave-header">
           <p className="outfit">Provide Web related Services</p>
-          <h2 className="outfit">Founder of Hubrave Agency</h2>
+          <h2 className="outfit">Hubrave Agency</h2>
           <div className="hubrave-stats">
             <div className="stat"><span>8+</span> Projects</div>
             <div className="stat"><span>AI</span> Driven</div>
@@ -218,9 +203,7 @@ const HubraveSection = () => (
         </div>
         <div className="hubrave-body">
           <p>A tech-driven agency focused on building and optimizing digital products for businesses. We bridge the gap between Data Science and premium UX.</p>
-          <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="interactive inline-block">
-            <ButtonColorful label="Explore" className="h-12 px-8" />
-          </a>
+          <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="hubrave-btn interactive">Explore <ArrowUpRight size={20} /></a>
         </div>
       </div>
     </div>
