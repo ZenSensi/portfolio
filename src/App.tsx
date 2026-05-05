@@ -151,9 +151,9 @@ const Hero = () => {
           [12, 15],
           [15, 10],
           [10, 15],
-          [15, 10],
-          [10, 15],
-          [15, 10],
+          [11, 11],
+          [14, 14],
+          [16, 12],
         ]}
         className={cn(
           "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
