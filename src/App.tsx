@@ -16,12 +16,15 @@ import { GridPattern } from "@/components/ui/grid-pattern";
 import { CardBody, CardContainer, CardItem } from "./components/ui/3d-card-effect";
 import Loader from "./components/ui/3d-box-loader-animation";
 
-// Custom Cursor Component
+// Custom Cursor Component (hidden on touch devices)
 const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
+    setIsTouchDevice(window.matchMedia('(hover: none)').matches);
+
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
@@ -43,6 +46,8 @@ const CustomCursor = () => {
     };
   }, []);
 
+  if (isTouchDevice) return null;
+
   return (
     <div
       className={`custom-cursor ${isHovering ? 'hovering' : ''}`}
@@ -52,17 +57,30 @@ const CustomCursor = () => {
 };
 
 // Navbar Component
-const Navbar = () => (
-  <nav className="navbar container">
-    <Link to="/" className="logo outfit interactive">AK.</Link>
-    <div className="nav-links">
-      <a href="/#projects" className="interactive">Projects</a>
-      <a href="/#about" className="interactive">About</a>
-      <Link to="/news" className="interactive">News</Link>
-      <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="hubrave-pill interactive">Hubrave Agency</a>
-    </div>
-  </nav>
-);
+const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = () => setMenuOpen(false);
+
+  return (
+    <nav className="navbar container">
+      <Link to="/" className="logo outfit interactive" onClick={closeMenu}>AK.</Link>
+      <button
+        className={`hamburger interactive ${menuOpen ? 'open' : ''}`}
+        onClick={() => setMenuOpen(!menuOpen)}
+        aria-label="Toggle navigation menu"
+        aria-expanded={menuOpen}
+      >
+        <span /><span /><span />
+      </button>
+      <div className={`nav-links ${menuOpen ? 'mobile-open' : ''}`}>
+        <a href="/#projects" className="interactive" onClick={closeMenu}>Projects</a>
+        <a href="/#about" className="interactive" onClick={closeMenu}>About</a>
+        <Link to="/news" className="interactive" onClick={closeMenu}>News</Link>
+        <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="hubrave-pill interactive" onClick={closeMenu}>Hubrave Agency</a>
+      </div>
+    </nav>
+  );
+};
 
 const dailyQuotes = [
   { text: "Design is not just what it looks like and feels like. Design is how it works.", author: "Steve Jobs" },
