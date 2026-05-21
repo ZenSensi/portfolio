@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Code, Palette, Layout, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { Routes, Route, Link } from 'react-router-dom';
 
 const Github = ({ size = 24 }: { size?: number }) => (
