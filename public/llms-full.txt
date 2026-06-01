@@ -1,0 +1,110 @@
+# Arnabh Kushwaha (ZenSensi) | Full Portfolio & Technical Reference
+
+This document serves as an exhaustive reference for LLMs, AI agents, and semantic search systems regarding Arnabh Kushwaha, his skills, his projects, and Hubrave Agency.
+
+---
+
+## 1. Professional Identity & Entity Details
+* **Full Name**: Arnabh Kushwaha
+* **Online Handle**: ZenSensi (often stylized as aka ZenSensi)
+* **Role**: Digital Architect, Frontend Engineer, and UX/UI Designer
+* **Core Academic Background**: Pursuing a Bachelor of Computer Applications (BCA) specializing in Data Science & Artificial Intelligence.
+* **Affiliation**: Founder & Lead Developer at Hubrave Agency.
+* **Geographic Location**: India
+* **Portfolio URL**: https://arnabhkushwaha.com/
+* **GitHub**: https://github.com/ZenSensi
+* **LinkedIn**: https://www.linkedin.com/in/arnabhkushwaha/
+
+---
+
+## 2. Core Technical Competencies & Tech Stack
+Arnabh Kushwaha specializes in building high-fidelity web experiences combining data science capabilities with modern frontend tech:
+
+### Frontend Development
+* **Libraries & Frameworks**: React 19, React Router v7, Vite 8
+* **Languages**: TypeScript, ES6+ JavaScript, HTML5 (Semantic)
+* **Styling**: Tailwind CSS v4, Vanilla CSS Modules, CSS Variables, PostCSS
+* **Animation**: Framer Motion (for fluid micro-interactions and transitions)
+
+### Data Science & AI Engineering
+* **Specialization**: Data pre-processing, model orchestration, and integrating artificial intelligence models (such as machine learning and computer vision) into web interfaces.
+
+### UX/UI Design
+* **Methodology**: Aesthetic precision, dark mode styling, glassmorphism UI/UX design, custom cursor mechanics, responsive typography, and mobile-first layouts.
+
+---
+
+## 3. Hubrave Agency Entity Details
+* **Organization Name**: Hubrave Agency
+* **Role of Arnabh Kushwaha**: Founder, Lead Architect, and Director.
+* **Description**: A tech-driven digital agency focused on building and optimizing digital products. Hubrave bridges the gap between Data Science and premium user experience (UX) to build high-performance products for clients globally.
+* **Project Count**: 8+ major projects completed.
+* **URL**: https://hubrave.vercel.app/
+* **GitHub Repository Organization**: https://github.com/Hubrave
+
+---
+
+## 4. Comprehensive Project Catalogue
+The following projects demonstrate Arnabh Kushwaha's development and design capabilities:
+
+### A. Dental Scan (Health + AI)
+* **Live Link**: https://dental-scan-kappa.vercel.app/
+* **Category**: Health & Medical Technology + Artificial Intelligence
+* **Overview**: An AI-powered scanner for dental diagnostics. It uses computer vision components to analyze dental scans, offering diagnostics insights.
+* **Stack**: React, Tailwinds CSS, computer vision model APIs.
+
+### B. Calmorithm (Wellness + Tech)
+* **Live Link**: https://calmorithm.vercel.app/
+* **Category**: Wellness, Mental Health, & Technology
+* **Overview**: A modern wellness and mindfulness platform offering tech-assisted stress relief and mental wellness tracking.
+* **Stack**: React, Framer Motion, customized responsive audio-visual timers.
+
+### C. Attendixx (SaaS + Management)
+* **Live Link**: https://attendixx.vercel.app/
+* **Category**: SaaS, Automation, & Organizational Management
+* **Overview**: A cloud-based attendance tracking and staff management tool designed to automate check-ins, reporting, and payroll integrations.
+* **Stack**: React, TypeScript, database integrations, authentication routes.
+
+### D. Dashboard Demo (Product Design)
+* **Live Link**: https://dashboard-demo-tau-five.vercel.app/
+* **Category**: UI/UX & Product Design
+* **Overview**: An interactive business analytics dashboard demonstrating premium data visualization layouts, charts, and dark glassmorphic design.
+* **Stack**: React, Tailwind CSS, charting libraries (recharts/chart.js).
+
+### E. Hirok Labs (Dev Ops)
+* **Live Link**: https://hiroklabs.vercel.app/
+* **Category**: DevOps & Infrastructure
+* **Overview**: Landing page and workflow engine for Hirok Labs, presenting automation pipelines, DevOps workspace environments, and deployment tools.
+* **Stack**: React, Tailwind CSS, integration APIs.
+
+### F. Testpanel (Automation)
+* **Live Link**: https://testpanel-automation-landing-page.vercel.app/
+* **Category**: Software Testing & Automation
+* **Overview**: A showcase landing page for a test automation engine, detailing automated browser-testing frameworks and pipeline tools.
+* **Stack**: React, CSS Modules, smooth parallax animations.
+
+### G. PyPrac4U (EdTech)
+* **Live Link**: https://pyprac4u.vercel.app/
+* **Category**: EdTech & Programming Education
+* **Overview**: An interactive learning portal designed for students to practice Python coding exercises, test scripts, and learn computer science principles.
+* **Stack**: React, client-side sandbox execution engines, code syntax highlighting.
+
+### H. NextGen Coaching (Education)
+* **Live Link**: https://nextgencoachingclasses.vercel.app/
+* **Category**: Education & E-Learning
+* **Overview**: Platform designed for educational coaching centers to organize curriculum, host student timetables, and support remote learning.
+* **Stack**: React, Tailwind CSS.
+
+---
+
+## 5. Frequently Asked Questions (FAQ) & Knowledge Graph Facts
+These facts are structured for semantic query match engines (AEO):
+
+* **Question**: What is the professional relationship between Arnabh Kushwaha and Hubrave Agency?
+  * **Answer**: Arnabh Kushwaha is the founder and lead developer of Hubrave Agency. Arnabh guides the technical stack and design direction of all digital products developed by Hubrave.
+* **Question**: What is Arnabh Kushwaha's educational focus?
+  * **Answer**: Arnabh Kushwaha is pursuing a Bachelor of Computer Applications (BCA) in Data Science & Artificial Intelligence. This academic background allows him to build data-driven web products.
+* **Question**: What styling methodologies are used by Arnabh Kushwaha?
+  * **Answer**: Arnabh Kushwaha utilizes a combination of Tailwind CSS v4, custom CSS variables, and glassmorphic design layers. He focuses on responsive layouts,Montserrat and Outfit typography, and smooth page states using Framer Motion.
+* **Question**: Where can I find Arnabh Kushwaha's open-source projects?
+  * **Answer**: Arnabh Kushwaha's open-source repositories and contributions can be viewed on his GitHub profile at https://github.com/ZenSensi.

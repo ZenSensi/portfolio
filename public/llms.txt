@@ -1,0 +1,39 @@
+# Arnabh Kushwaha (ZenSensi) | Developer & UX Architect Portfolio
+
+Arnabh Kushwaha (aka ZenSensi) is a digital architect, software engineer, and student of BCA in Data Science & Artificial Intelligence. He is the founder of Hubrave Agency and specializes in high-fidelity, premium interactive web applications.
+
+## Technical Details & Resources
+- **[Full Technical Reference & Project Details](/llms-full.txt)** - Deep technical specification of all projects and systems.
+- **Website**: https://arnabhkushwaha.com
+- **LinkedIn**: https://www.linkedin.com/in/arnabhkushwaha/
+- **GitHub**: https://github.com/ZenSensi
+- **Agency (Hubrave)**: https://hubrave.vercel.app/
+
+## Core Focus Areas
+- **Data Science & AI**: Leveraging machine learning and predictive data to drive UI features.
+- **Frontend Engineering**: Advanced React (19), TypeScript (6), Vite, Framer Motion, and Tailwind CSS.
+- **UX/UI Design**: Interactive 3D interfaces, custom micro-interactions, responsive design systems.
+
+## Hubrave Agency
+Founded by Arnabh Kushwaha, Hubrave is a digital product agency that bridges the gap between Data Science and premium user experience (UX) to build high-performance digital products for businesses worldwide.
+- **Projects**: 8+ digital products built and deployed.
+- **Key Offering**: Custom web app design, development, AI integrations, and search engine optimization.
+- **Website**: https://hubrave.vercel.app/
+
+## Selected Projects & Work
+Here is the portfolio of live digital products:
+
+1. **Dental Scan** (Health + AI) - https://dental-scan-kappa.vercel.app/
+2. **Calmorithm** (Wellness + Tech) - https://calmorithm.vercel.app/
+3. **Attendixx** (SaaS + Management) - https://attendixx.vercel.app/
+4. **Dashboard Demo** (Product Design) - https://dashboard-demo-tau-five.vercel.app/
+5. **Hirok Labs** (Dev Ops) - https://hiroklabs.vercel.app/
+6. **Testpanel** (Automation) - https://testpanel-automation-landing-page.vercel.app/
+7. **PyPrac4U** (EdTech) - https://pyprac4u.vercel.app/
+8. **NextGen Coaching** (Education) - https://nextgencoachingclasses.vercel.app/
+
+## Frequently Asked Questions (FAQ)
+- **Who is Arnabh Kushwaha?** He is a digital architect, UX designer, and web developer pursuing a BCA in Data Science & AI. He is the founder of Hubrave Agency.
+- **What is ZenSensi?** ZenSensi is the professional online developer handle and alias of Arnabh Kushwaha.
+- **What does Hubrave Agency do?** Hubrave Agency develops custom, high-end digital products, web designs, SaaS platforms, and AI integrations for businesses.
+- **What are Arnabh's technical skills?** React 19, TypeScript, Framer Motion, Tailwind CSS, Data Science, and UX Research.

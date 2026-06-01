@@ -402,20 +402,102 @@ const Footer = () => (
   </footer>
 );
 
+// FAQ Component for SEO/AEO Rich Snippets & Interactive Q&A
+const faqs = [
+  {
+    question: "Who is Arnabh Kushwaha (ZenSensi)?",
+    answer: "Arnabh Kushwaha (also known as ZenSensi) is a digital architect, web developer, and UX designer who specializes in building premium, high-performance web applications. He is currently pursuing a BCA in Data Science & Artificial Intelligence, combining analytical data capabilities with aesthetic user experiences. He is the founder of Hubrave Agency."
+  },
+  {
+    question: "What is Hubrave Agency?",
+    answer: "Hubrave Agency is a tech-driven digital product agency founded by Arnabh Kushwaha. The agency's focus is bridging the gap between Data Science, AI integration, and premium UX/UI. Hubrave builds and optimizes custom web products, SaaS platforms, and digital solutions for clients globally."
+  },
+  {
+    question: "What technologies does Arnabh Kushwaha specialize in?",
+    answer: "Arnabh specializes in advanced frontend engineering using React (version 19), TypeScript, and Vite. He builds responsive design systems and interactions using Tailwind CSS and Framer Motion. He also integrates backend automations and Data Science/AI pipelines into his projects."
+  },
+  {
+    question: "What digital products has Arnabh Kushwaha built?",
+    answer: "Arnabh has designed and developed multiple live digital products, including Dental Scan (an AI diagnostics tool for healthcare), Calmorithm (a tech wellness platform), Attendixx (a SaaS attendance tracker), Hirok Labs (DevOps pipelines), PyPrac4U (an educational platform for Python), and next-generation coaching school software."
+  }
+];
+
+const FAQ = () => {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const toggleFAQ = (index: number) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  return (
+    <section id="faq" className="section-padding container faq-section">
+      <div className="section-header">
+        <p className="outfit section-subtitle">Questions & Answers</p>
+        <h2 className="outfit section-title">FAQ & Credentials</h2>
+      </div>
+      <div className="faq-list">
+        {faqs.map((faq, index) => {
+          const isOpen = activeIndex === index;
+          return (
+            <div key={index} className="faq-item glass">
+              <button
+                className="faq-question outfit interactive"
+                onClick={() => toggleFAQ(index)}
+                aria-expanded={isOpen}
+              >
+                <span>{faq.question}</span>
+                <span className={`faq-icon ${isOpen ? 'open' : ''}`}>+</span>
+              </button>
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="faq-answer-wrapper"
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="faq-answer">
+                      <p>{faq.answer}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
+
 const Home = () => (
   <>
+    {/* React 19 Metadata Hoisting */}
+    <title>Arnabh Kushwaha | Portfolio & Digital Architect</title>
+    <meta name="description" content="Portfolio of Arnabh Kushwaha (ZenSensi) - BCA Student in Data Science & AI, Web Developer, UX/UI Designer, and founder of Hubrave Agency. Building modern, high-performance digital products." />
+    <link rel="canonical" href="https://arnabhkushwaha.com/" />
+    
     <Hero />
     <HubraveSection />
     <Projects />
     <About />
+    <FAQ />
   </>
 );
 
 const NewsPage = () => (
   <div style={{ paddingTop: '50px', minHeight: '80vh' }}>
+    {/* React 19 Metadata Hoisting */}
+    <title>Latest Tech & AI News | Arnabh Kushwaha</title>
+    <meta name="description" content="Stay updated with the latest trends in Artificial Intelligence, machine learning, and software engineering, curated by Arnabh Kushwaha." />
+    <link rel="canonical" href="https://arnabhkushwaha.com/news" />
+    
     <Newsletter />
   </div>
 );
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
