@@ -230,10 +230,10 @@ const HubraveSection = () => (
 
 // Projects Section
 const projects = [
-  { title: 'Dental Scan', url: 'https://dental-scan-kappa.vercel.app/', category: 'Health + AI' },
+  { title: 'Dental Scan', url: 'https://dentalheathcaredemo.vercel.app/', category: 'Health + AI' },
   { title: 'Calmorithm', url: 'https://calmorithm.vercel.app/', category: 'Wellness + Tech' },
   { title: 'Attendixx', url: 'https://attendixx.vercel.app/', category: 'SaaS + Management' },
-  { title: 'Dashboard Demo', url: 'https://dashboard-demo-tau-five.vercel.app/', category: 'Product Design' },
+  { title: 'Dashboard Demo', url: 'https://demodash-git-old-dashboard-arnabh-projects.vercel.app/', category: 'Product Design' },
   { title: 'Hirok Labs', url: 'https://hiroklabs.vercel.app/', category: 'Dev Ops' },
   { title: 'Testpanel', url: 'https://testpanel-automation-landing-page.vercel.app/', category: 'Automation' },
   { title: 'PyPrac4U', url: 'https://pyprac4u.vercel.app/', category: 'EdTech' },

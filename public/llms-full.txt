@@ -48,7 +48,7 @@ Arnabh Kushwaha specializes in building high-fidelity web experiences combining 
 The following projects demonstrate Arnabh Kushwaha's development and design capabilities:
 
 ### A. Dental Scan (Health + AI)
-* **Live Link**: https://dental-scan-kappa.vercel.app/
+* **Live Link**: https://dentalheathcaredemo.vercel.app/
 * **Category**: Health & Medical Technology + Artificial Intelligence
 * **Overview**: An AI-powered scanner for dental diagnostics. It uses computer vision components to analyze dental scans, offering diagnostics insights.
 * **Stack**: React, Tailwinds CSS, computer vision model APIs.
@@ -66,7 +66,7 @@ The following projects demonstrate Arnabh Kushwaha's development and design capa
 * **Stack**: React, TypeScript, database integrations, authentication routes.
 
 ### D. Dashboard Demo (Product Design)
-* **Live Link**: https://dashboard-demo-tau-five.vercel.app/
+* **Live Link**: https://demodash-git-old-dashboard-arnabh-projects.vercel.app/
 * **Category**: UI/UX & Product Design
 * **Overview**: An interactive business analytics dashboard demonstrating premium data visualization layouts, charts, and dark glassmorphic design.
 * **Stack**: React, Tailwind CSS, charting libraries (recharts/chart.js).

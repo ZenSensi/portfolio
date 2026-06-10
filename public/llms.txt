@@ -23,10 +23,10 @@ Founded by Arnabh Kushwaha, Hubrave is a digital product agency that bridges the
 ## Selected Projects & Work
 Here is the portfolio of live digital products:
 
-1. **Dental Scan** (Health + AI) - https://dental-scan-kappa.vercel.app/
+1. **Dental Scan** (Health + AI) - https://dentalheathcaredemo.vercel.app/
 2. **Calmorithm** (Wellness + Tech) - https://calmorithm.vercel.app/
 3. **Attendixx** (SaaS + Management) - https://attendixx.vercel.app/
-4. **Dashboard Demo** (Product Design) - https://dashboard-demo-tau-five.vercel.app/
+4. **Dashboard Demo** (Product Design) - https://demodash-git-old-dashboard-arnabh-projects.vercel.app/
 5. **Hirok Labs** (Dev Ops) - https://hiroklabs.vercel.app/
 6. **Testpanel** (Automation) - https://testpanel-automation-landing-page.vercel.app/
 7. **PyPrac4U** (EdTech) - https://pyprac4u.vercel.app/
