@@ -230,7 +230,7 @@ const HubraveSection = () => (
 
 // Projects Section
 const projects = [
-  { title: 'Dental Scan', url: 'https://dentalheathcaredemo.vercel.app/', category: 'Health + AI' },
+  { title: 'We Care Dental Clinic', url: 'https://wecaredentalclinic.vercel.app/', category: 'Health + AI' },
   { title: 'Calmorithm', url: 'https://calmorithm.vercel.app/', category: 'Wellness + Tech' },
   { title: 'Attendixx', url: 'https://attendixx.vercel.app/', category: 'SaaS + Management' },
   { title: 'Dashboard Demo', url: 'https://demodash-git-old-dashboard-arnabh-projects.vercel.app/', category: 'Product Design' },
@@ -418,7 +418,7 @@ const faqs = [
   },
   {
     question: "What digital products has Arnabh Kushwaha built?",
-    answer: "Arnabh has designed and developed multiple live digital products, including Dental Scan (an AI diagnostics tool for healthcare), Calmorithm (a tech wellness platform), Attendixx (a SaaS attendance tracker), Hirok Labs (DevOps pipelines), PyPrac4U (an educational platform for Python), and next-generation coaching school software."
+    answer: "Arnabh has designed and developed multiple live digital products, including We Care Dental Clinic (an AI diagnostics tool for healthcare), Calmorithm (a tech wellness platform), Attendixx (a SaaS attendance tracker), Hirok Labs (DevOps pipelines), PyPrac4U (an educational platform for Python), and next-generation coaching school software."
   }
 ];
 

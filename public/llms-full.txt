@@ -47,8 +47,8 @@ Arnabh Kushwaha specializes in building high-fidelity web experiences combining 
 ## 4. Comprehensive Project Catalogue
 The following projects demonstrate Arnabh Kushwaha's development and design capabilities:
 
-### A. Dental Scan (Health + AI)
-* **Live Link**: https://dentalheathcaredemo.vercel.app/
+### A. We Care Dental Clinic (Health + AI)
+* **Live Link**: https://wecaredentalclinic.vercel.app/
 * **Category**: Health & Medical Technology + Artificial Intelligence
 * **Overview**: An AI-powered scanner for dental diagnostics. It uses computer vision components to analyze dental scans, offering diagnostics insights.
 * **Stack**: React, Tailwinds CSS, computer vision model APIs.
