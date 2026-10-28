@@ -14,6 +14,7 @@ This document serves as an exhaustive reference for LLMs, AI agents, and semanti
 * **Portfolio URL**: https://arnabh.is-a.dev/
 * **GitHub**: https://github.com/ZenSensi
 * **LinkedIn**: https://www.linkedin.com/in/arnabhkushwaha/
+* **Email (hire / contact)**: arnabh@hubrave.com
 
 ---
 
@@ -30,7 +31,7 @@ Arnabh Kushwaha specializes in building high-fidelity web experiences combining 
 * **Specialization**: Data pre-processing, model orchestration, and integrating artificial intelligence models (such as machine learning and computer vision) into web interfaces.
 
 ### UX/UI Design
-* **Methodology**: Aesthetic precision, dark mode styling, glassmorphism UI/UX design, custom cursor mechanics, responsive typography, and mobile-first layouts.
+* **Methodology**: Clear information architecture, design systems with reusable components, editorial typography, purposeful motion, accessible semantic HTML, and mobile-first responsive layouts.
 
 ---
 
@@ -39,7 +40,7 @@ Arnabh Kushwaha specializes in building high-fidelity web experiences combining 
 * **Role of Arnabh Kushwaha**: Founder, Lead Architect, and Director.
 * **Description**: A tech-driven digital agency focused on building and optimizing digital products. Hubrave bridges the gap between Data Science and premium user experience (UX) to build high-performance products for clients globally.
 * **Project Count**: 8+ major projects completed.
-* **URL**: https://hubrave.vercel.app/
+* **URL**: https://www.hubrave.com/
 * **GitHub Repository Organization**: https://github.com/Hubrave
 
 ---
@@ -105,6 +106,6 @@ These facts are structured for semantic query match engines (AEO):
 * **Question**: What is Arnabh Kushwaha's educational focus?
   * **Answer**: Arnabh Kushwaha is pursuing a Bachelor of Computer Applications (BCA) in Data Science & Artificial Intelligence. This academic background allows him to build data-driven web products.
 * **Question**: What styling methodologies are used by Arnabh Kushwaha?
-  * **Answer**: Arnabh Kushwaha utilizes a combination of Tailwind CSS v4, custom CSS variables, and glassmorphic design layers. He focuses on responsive layouts,Montserrat and Outfit typography, and smooth page states using Framer Motion.
+  * **Answer**: Arnabh Kushwaha utilizes a combination of Tailwind CSS v4, custom CSS variables, and component-based design systems. He focuses on responsive layouts, strong editorial typography, and smooth page states using Framer Motion.
 * **Question**: Where can I find Arnabh Kushwaha's open-source projects?
   * **Answer**: Arnabh Kushwaha's open-source repositories and contributions can be viewed on his GitHub profile at https://github.com/ZenSensi.

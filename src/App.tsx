@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Mail, Target } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Mail, Plus, Target } from 'lucide-react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import './App.css';
 
@@ -14,6 +14,8 @@ const Linkedin = ({ size = 24 }: { size?: number }) => (
 
 // The contact form opens a mailto: to this address
 const CONTACT_EMAIL = 'arnabh@hubrave.com';
+const SITE = 'https://arnabh.is-a.dev';
+const HUBRAVE = 'https://www.hubrave.com/';
 
 const socials = [
   { label: 'LinkedIn', handle: 'arnabhkushwaha', href: 'https://www.linkedin.com/in/arnabhkushwaha/', icon: <Linkedin size={14} /> },
@@ -35,12 +37,18 @@ const projects: { title: string; url: string; category: string; image?: string }
 const pad = (n: number) => String(n).padStart(2, '0');
 
 // Photo with a graceful fallback: drop an image at public/<src> and it shows up
-const Photo = ({ src, fallback }: { src: string; fallback: string }) => (
-  <div className="photo">
-    <span>{fallback}</span>
-    <img src={src} alt="" onError={e => { e.currentTarget.style.display = 'none'; }} />
-  </div>
-);
+const Photo = ({ src, fallback }: { src: string; fallback: string }) => {
+  const img = useRef<HTMLImageElement>(null);
+  const hide = () => { if (img.current) img.current.style.display = 'none'; };
+  // Prerendered images can fail before React attaches onError, so also check once mounted
+  useEffect(() => { if (img.current?.complete && !img.current.naturalWidth) hide(); }, []);
+  return (
+    <div className="photo">
+      <span>{fallback}</span>
+      <img ref={img} src={src} alt="" onError={hide} />
+    </div>
+  );
+};
 
 // Live, scaled-down render of the project site (or its screenshot); mobile renders a phone-width viewport
 const Preview = ({ url, title, image, mobile = false }: { url: string; title: string; image?: string; mobile?: boolean }) => (
@@ -87,7 +95,7 @@ const fadeUp = { initial: { opacity: 0, y: 30 }, whileInView: { opacity: 1, y: 0
 
 const Hero = () => (
   <section className="hero">
-    <h1 className="giant">Design</h1>
+    <p className="giant" aria-hidden="true">Design</p>
 
     <motion.div className="glass id-card" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, delay: .2 }}>
       <Screws />
@@ -95,7 +103,7 @@ const Hero = () => (
       <div className="id-main">
         <div className="avatar"><Photo src="/me.jpg" fallback="AK" /></div>
         <div>
-          <h2>Arnabh<br />Kushwaha.</h2>
+          <h1>Arnabh{' '}<br />Kushwaha.<span className="sr-only"> (ZenSensi) — Web Developer &amp; UX/UI Designer, Founder of Hubrave</span></h1>
           <p className="mono">Web developer / UX designer</p>
         </div>
       </div>
@@ -237,6 +245,72 @@ const Result = () => (
   </motion.section>
 );
 
+const faqs = [
+  { q: 'Who is Arnabh Kushwaha?', a: 'Arnabh Kushwaha, known online as ZenSensi, is a web developer and UX/UI designer from India. He is pursuing a BCA in Data Science & Artificial Intelligence and is the founder of Hubrave, a tech-driven digital agency.' },
+  { q: 'What is Hubrave?', a: 'Hubrave is a digital agency founded by Arnabh Kushwaha. It designs, builds and optimizes websites, SaaS dashboards and AI-powered tools for businesses, combining data science with clean, fast user experience.' },
+  { q: 'What technologies does Arnabh Kushwaha work with?', a: 'He builds frontends with React, TypeScript, Vite, Tailwind CSS and Framer Motion, designs interfaces and design systems for UX/UI, and integrates data science and AI features where they help users.' },
+  { q: 'What projects has Arnabh Kushwaha built?', a: `He has built and launched ${projects.length} live web products: ${projects.map(p => `${p.title} (${p.category})`).join(', ')}.` },
+  { q: 'How can I hire Arnabh Kushwaha for a project?', a: `Send a message through the contact form on this page or email ${CONTACT_EMAIL}. He is open to new website, web app, SaaS and AI integration projects in 2026.` },
+  { q: 'What does ZenSensi mean?', a: 'ZenSensi is the online handle Arnabh Kushwaha uses on GitHub and across the web.' },
+];
+
+const FAQ = () => (
+  <motion.section className="sec faq" id="faq" {...fadeUp}>
+    <div>
+      <span className="num">05</span>
+      <h2 className="head small">Questions,<br />answered.</h2>
+    </div>
+    <div className="faq-list">
+      {faqs.map(f => (
+        <details key={f.q}>
+          <summary><h3>{f.q}</h3><Plus size={16} /></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </motion.section>
+);
+
+// Structured data for search engines and AI answer engines, built from the same data the page renders
+const JsonLd = ({ data }: { data: object }) => (
+  <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, '\\u003c') }} />
+);
+
+const person = { '@id': `${SITE}/#person` };
+const homeSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ProfilePage', '@id': `${SITE}/#profile`, url: `${SITE}/`, name: 'Arnabh Kushwaha (ZenSensi) — Portfolio',
+      inLanguage: 'en', dateModified: '2026-10-29', mainEntity: person, isPartOf: { '@id': `${SITE}/#website` },
+    },
+    {
+      '@type': 'Person', ...person, name: 'Arnabh Kushwaha', alternateName: 'ZenSensi', url: `${SITE}/`, image: `${SITE}/og.png`,
+      email: `mailto:${CONTACT_EMAIL}`, jobTitle: 'Web Developer & UX/UI Designer',
+      description: faqs[0].a, address: { '@type': 'PostalAddress', addressCountry: 'IN' },
+      worksFor: { '@id': `${HUBRAVE}#organization` },
+      knowsAbout: ['Web Development', 'UX/UI Design', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Data Science', 'Artificial Intelligence'],
+      sameAs: ['https://github.com/ZenSensi', 'https://www.linkedin.com/in/arnabhkushwaha/', HUBRAVE],
+    },
+    {
+      '@type': 'Organization', '@id': `${HUBRAVE}#organization`, name: 'Hubrave', alternateName: 'Hubrave Agency', url: HUBRAVE,
+      founder: person, description: faqs[1].a,
+    },
+    { '@type': 'WebSite', '@id': `${SITE}/#website`, url: `${SITE}/`, name: 'Arnabh Kushwaha', alternateName: 'ZenSensi', publisher: person, inLanguage: 'en' },
+    {
+      '@type': 'ItemList', '@id': `${SITE}/#projects`, name: 'Projects by Arnabh Kushwaha',
+      itemListElement: projects.map((p, i) => ({
+        '@type': 'ListItem', position: i + 1,
+        item: { '@type': 'WebSite', name: p.title, url: p.url, genre: p.category, creator: person },
+      })),
+    },
+    {
+      '@type': 'FAQPage', '@id': `${SITE}/#faq`,
+      mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ],
+};
+
 const Footer = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const submit = (e: React.FormEvent) => {
@@ -275,7 +349,7 @@ const Footer = () => {
       <div className="footer-bottom mono">
         <span>Legal</span><span>2026</span>
         <Link to="/news">News</Link>
-        <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer">Hubrave Agency ↗</a>
+        <a href={HUBRAVE} target="_blank" rel="noopener noreferrer">Hubrave Agency ↗</a>
       </div>
     </footer>
   );
@@ -283,14 +357,16 @@ const Footer = () => {
 
 const Home = () => (
   <>
-    <title>Arnabh Kushwaha | Portfolio & Digital Architect</title>
-    <meta name="description" content="Portfolio of Arnabh Kushwaha (ZenSensi) - BCA Student in Data Science & AI, Web Developer, UX/UI Designer, and founder of Hubrave Agency. Building modern, high-performance digital products." />
-    <link rel="canonical" href="https://arnabh.is-a.dev/" />
+    <title>Arnabh Kushwaha (ZenSensi) — Web Developer &amp; UX/UI Designer | Hubrave</title>
+    <meta name="description" content="Arnabh Kushwaha (ZenSensi) is a web developer and UX/UI designer from India and founder of Hubrave. React, TypeScript and AI-powered websites, SaaS and web apps." />
+    <link rel="canonical" href={`${SITE}/`} />
+    <JsonLd data={homeSchema} />
     <Hero />
     <Intro />
     <Architecture />
     <Work />
     <Result />
+    <FAQ />
   </>
 );
 
@@ -325,7 +401,7 @@ const NewsPage = () => {
     <section className="sec news">
       <title>Latest Tech & AI News | Arnabh Kushwaha</title>
       <meta name="description" content="Stay updated with the latest trends in Artificial Intelligence, machine learning, and software engineering, curated by Arnabh Kushwaha." />
-      <link rel="canonical" href="https://arnabh.is-a.dev/news" />
+      <link rel="canonical" href={`${SITE}/news`} />
       <div>
         <span className="num">AI</span>
         <h1 className="head">Latest<br />news.</h1>

@@ -7,7 +7,9 @@ Arnabh Kushwaha (aka ZenSensi) is a digital architect, software engineer, and st
 - **Website**: https://arnabh.is-a.dev
 - **LinkedIn**: https://www.linkedin.com/in/arnabhkushwaha/
 - **GitHub**: https://github.com/ZenSensi
-- **Agency (Hubrave)**: https://hubrave.vercel.app/
+- **Email (hire / contact)**: arnabh@hubrave.com
+- **Location**: India
+- **Agency (Hubrave)**: https://www.hubrave.com/
 
 ## Core Focus Areas
 - **Data Science & AI**: Leveraging machine learning and predictive data to drive UI features.
@@ -18,7 +20,7 @@ Arnabh Kushwaha (aka ZenSensi) is a digital architect, software engineer, and st
 Founded by Arnabh Kushwaha, Hubrave is a digital product agency that bridges the gap between Data Science and premium user experience (UX) to build high-performance digital products for businesses worldwide.
 - **Projects**: 8+ digital products built and deployed.
 - **Key Offering**: Custom web app design, development, AI integrations, and search engine optimization.
-- **Website**: https://hubrave.vercel.app/
+- **Website**: https://www.hubrave.com/
 
 ## Selected Projects & Work
 Here is the portfolio of live digital products:
@@ -37,3 +39,4 @@ Here is the portfolio of live digital products:
 - **What is ZenSensi?** ZenSensi is the professional online developer handle and alias of Arnabh Kushwaha.
 - **What does Hubrave Agency do?** Hubrave Agency develops custom, high-end digital products, web designs, SaaS platforms, and AI integrations for businesses.
 - **What are Arnabh's technical skills?** React 19, TypeScript, Framer Motion, Tailwind CSS, Data Science, and UX Research.
+- **How can I hire Arnabh Kushwaha?** Use the contact form at https://arnabh.is-a.dev/#contact or email arnabh@hubrave.com. He is open to new website, web app, SaaS and AI integration projects in 2026.
