@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Code, Palette, Layout, ArrowUpRight } from 'lucide-react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowRight, ArrowUpRight, Mail, Target } from 'lucide-react';
+import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import './App.css';
 
 const Github = ({ size = 24 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
@@ -10,536 +11,351 @@ const Github = ({ size = 24 }: { size?: number }) => (
 const Linkedin = ({ size = 24 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
 );
-import './App.css';
-import { cn } from "@/lib/utils";
-import { GridPattern } from "@/components/ui/grid-pattern";
-import { CardBody, CardContainer, CardItem } from "./components/ui/3d-card-effect";
-import Loader from "./components/ui/3d-box-loader-animation";
 
-// Custom Cursor Component (hidden on touch devices)
-const CustomCursor = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+// The contact form opens a mailto: to this address
+const CONTACT_EMAIL = 'arnabh@hubrave.com';
 
-  useEffect(() => {
-    setIsTouchDevice(window.matchMedia('(hover: none)').matches);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-    };
-
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest('a, button, .interactive')) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseover', handleMouseOver);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseover', handleMouseOver);
-    };
-  }, []);
-
-  if (isTouchDevice) return null;
-
-  return (
-    <div
-      className={`custom-cursor ${isHovering ? 'hovering' : ''}`}
-      style={{ left: `${position.x}px`, top: `${position.y}px`, transform: `translate(-50%, -50%) ${isHovering ? 'scale(4)' : 'scale(1)'}` }}
-    />
-  );
-};
-
-// Navbar Component
-const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const closeMenu = () => setMenuOpen(false);
-
-  return (
-    <nav className="navbar container">
-      <Link to="/" className="logo outfit interactive" onClick={closeMenu}>AK.</Link>
-      <button
-        className={`hamburger interactive ${menuOpen ? 'open' : ''}`}
-        onClick={() => setMenuOpen(!menuOpen)}
-        aria-label="Toggle navigation menu"
-        aria-expanded={menuOpen}
-      >
-        <span /><span /><span />
-      </button>
-      <div className={`nav-links ${menuOpen ? 'mobile-open' : ''}`}>
-        <a href="/#projects" className="interactive" onClick={closeMenu}>Projects</a>
-        <a href="/#about" className="interactive" onClick={closeMenu}>About</a>
-        <Link to="/news" className="interactive" onClick={closeMenu}>News</Link>
-        <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="hubrave-pill interactive" onClick={closeMenu}>Hubrave Agency</a>
-      </div>
-    </nav>
-  );
-};
-
-const dailyQuotes = [
-  { text: "Design is not just what it looks like and feels like. Design is how it works.", author: "Steve Jobs" },
-  { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
-  { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
-  { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
-  { text: "Make it work, make it right, make it fast.", author: "Kent Beck" },
-  { text: "Good design is obvious. Great design is transparent.", author: "Joe Sparano" },
-  { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" }
+const socials = [
+  { label: 'LinkedIn', handle: 'arnabhkushwaha', href: 'https://www.linkedin.com/in/arnabhkushwaha/', icon: <Linkedin size={14} /> },
+  { label: 'GitHub', handle: 'ZenSensi', href: 'https://github.com/ZenSensi', icon: <Github size={14} /> },
 ];
 
-// Hero Component
-const Hero = () => {
-  const [displayText, setDisplayText] = useState('Arnabh Kushwaha');
-  const [phase, setPhase] = useState(0);
-  const [quote, setQuote] = useState(dailyQuotes[0]);
-
-  useEffect(() => {
-    setQuote(dailyQuotes[Math.floor(Math.random() * dailyQuotes.length)]);
-  }, []);
-
-  useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
-
-    const handleTyping = () => {
-      if (phase === 0) { // Wait at end of Arnabh Kushwaha
-        timeout = setTimeout(() => setPhase(1), 2000);
-      } else if (phase === 1) { // Erasing Arnabh Kushwaha
-        if (displayText === '') {
-          setPhase(2);
-        } else {
-          timeout = setTimeout(() => {
-            setDisplayText(prev => prev.slice(0, -1));
-          }, 80);
-        }
-      } else if (phase === 2) { // Typing "aka ZenSensi"
-        const target = 'aka ZenSensi';
-        if (displayText === target) {
-          setPhase(3);
-        } else {
-          timeout = setTimeout(() => {
-            setDisplayText(target.slice(0, displayText.length + 1));
-          }, 150);
-        }
-      } else if (phase === 3) { // Wait at end of aka ZenSensi
-        timeout = setTimeout(() => setPhase(4), 2000);
-      } else if (phase === 4) { // Erasing aka ZenSensi
-        if (displayText === '') {
-          setPhase(5);
-        } else {
-          timeout = setTimeout(() => {
-            setDisplayText(prev => prev.slice(0, -1));
-          }, 80);
-        }
-      } else if (phase === 5) { // Rewriting Arnabh Kushwaha
-        const target = 'Arnabh Kushwaha';
-        if (displayText === target) {
-          setPhase(0);
-        } else {
-          timeout = setTimeout(() => {
-            setDisplayText(target.slice(0, displayText.length + 1));
-          }, 150);
-        }
-      }
-    };
-
-    handleTyping();
-    return () => clearTimeout(timeout);
-  }, [phase, displayText]);
-
-  return (
-    <section className="hero container">
-      <div className="scanlines" />
-      <GridPattern
-        squares={[
-          [4, 4],
-          [5, 1],
-          [8, 2],
-          [5, 3],
-          [5, 5],
-          [10, 10],
-          [12, 15],
-          [15, 10],
-          [10, 15],
-          [15, 10],
-          [10, 15],
-          [15, 10],
-        ]}
-        className={cn(
-          "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
-          "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 opacity-40",
-        )}
-      />
-      <div className="hero-content">
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="hero-title"
-        >
-          {displayText}<span className="cursor" />
-        </motion.h1>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="hero-description"
-        >
-          Web Developer, Designer & UX/UI Specialist. Building the next generation of digital experiences.
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="daily-quote-section"
-        >
-          <p className="quote-text">"{quote.text}"</p>
-          <p className="quote-author">— {quote.author}</p>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-// Hubrave Section
-const HubraveSection = () => (
-  <section className="hubrave-section">
-    <div className="container">
-      <div className="hubrave-card">
-        <div className="hubrave-header">
-          <p className="outfit">Provide Web related Services</p>
-          <h2 className="outfit">Hubrave Agency</h2>
-          <div className="hubrave-stats">
-            <div className="stat"><span>8+</span> Projects</div>
-            <div className="stat"><span>AI</span> Driven</div>
-          </div>
-        </div>
-        <div className="hubrave-body">
-          <p>A tech-driven agency focused on building and optimizing digital products for businesses. We bridge the gap between Data Science and premium UX.</p>
-          <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer" className="hubrave-btn interactive">Explore <ArrowUpRight size={20} /></a>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-// Projects Section
-const projects = [
+// image: optional screenshot in public/ — shown instead of the live iframe preview
+const projects: { title: string; url: string; category: string; image?: string }[] = [
   { title: 'We Care Dental Clinic', url: 'https://wecaredentalclinic.vercel.app/', category: 'Health + AI' },
   { title: 'Calmorithm', url: 'https://calmorithm.vercel.app/', category: 'Wellness + Tech' },
   { title: 'Attendixx', url: 'https://attendixx.vercel.app/', category: 'SaaS + Management' },
-  { title: 'Dashboard Demo', url: 'https://demodash-git-old-dashboard-arnabh-projects.vercel.app/', category: 'Product Design' },
   { title: 'Hirok Labs', url: 'https://hiroklabs.vercel.app/', category: 'Dev Ops' },
+  { title: 'Dashboard Demo', url: 'https://demodash-git-old-dashboard-arnabh-projects.vercel.app/', category: 'Product Design', image: '/projects/dashboard-demo.png' },
   { title: 'Testpanel', url: 'https://testpanel-automation-landing-page.vercel.app/', category: 'Automation' },
   { title: 'PyPrac4U', url: 'https://pyprac4u.vercel.app/', category: 'EdTech' },
   { title: 'NextGen Coaching', url: 'https://nextgencoachingclasses.vercel.app/', category: 'Education' },
 ];
 
-const Projects = () => (
-  <section id="projects" className="section-padding container">
-    <div className="section-header">
-      <h2 className="outfit section-title">My Projects</h2>
-      <p className="section-subtitle">Selected digital products and experiments.</p>
-    </div>
-    <div className="projects-grid">
-      {projects.map((project, index) => (
-        <CardContainer key={index} className="inter-var w-full" containerClassName="py-4 w-full">
-          <a href={project.url} target="_blank" rel="noopener noreferrer" className="block w-full">
-            <CardBody className="project-card glass interactive h-auto w-full group/card">
-              <CardItem
-                translateZ="50"
-                className="project-category outfit"
-              >
-                {project.category}
-              </CardItem>
-              <CardItem
-                translateZ="100"
-                className="project-title outfit"
-              >
-                {project.title}
-              </CardItem>
-              <CardItem
-                translateZ="60"
-                className="project-link-icon"
-              >
-                <ArrowUpRight size={24} />
-              </CardItem>
-            </CardBody>
-          </a>
-        </CardContainer>
-      ))}
-    </div>
-  </section>
+const pad = (n: number) => String(n).padStart(2, '0');
+
+// Photo with a graceful fallback: drop an image at public/<src> and it shows up
+const Photo = ({ src, fallback }: { src: string; fallback: string }) => (
+  <div className="photo">
+    <span>{fallback}</span>
+    <img src={src} alt="" onError={e => { e.currentTarget.style.display = 'none'; }} />
+  </div>
 );
 
-// About Section
-const About = () => (
-  <section id="about" className="section-padding container about-section">
-    <div className="about-grid">
-      <div className="about-text">
-        <p className="outfit section-subtitle">The Story</p>
-        <h2 className="outfit section-title">Creative Engineering</h2>
-        <p>I am Arnabh Kushwaha, a digital architect currently pursuing <strong>BCA in Data Science & Artificial Intelligence</strong>. I believe in the power of code and design to solve complex problems and create meaningful human experiences.</p>
-        <p>As the founder of <strong>Hubrave</strong>, I lead a team of creators dedicated to building and optimizing digital products for businesses across the globe. My focus is at the intersection of technical excellence and aesthetic precision.</p>
-        <div className="skills-tags">
-          <span>Data Science</span><span>AI Engineering</span><span>React Development</span><span>UX Research</span><span>UI Design</span>
+// Live, scaled-down render of the project site (or its screenshot); mobile renders a phone-width viewport
+const Preview = ({ url, title, image, mobile = false }: { url: string; title: string; image?: string; mobile?: boolean }) => (
+  <div className={`preview ${mobile ? 'mobile' : ''}`}>
+    {image && !mobile
+      ? <img src={image} alt={`${title} screenshot`} loading="lazy" />
+      : <iframe src={url} title={`${title} preview`} loading="lazy" tabIndex={-1} aria-hidden="true" />}
+  </div>
+);
+
+const Laptop = ({ p }: { p: typeof projects[number] }) => (
+  <div className="laptop">
+    <div className="laptop-screen"><Preview url={p.url} title={p.title} image={p.image} /></div>
+    <div className="laptop-base" />
+  </div>
+);
+
+const Phone = ({ p }: { p: typeof projects[number] }) => (
+  <div className="phone"><Preview url={p.url} title={p.title} mobile /></div>
+);
+
+const Screws = () => <><i className="screw tl" /><i className="screw tr" /><i className="screw bl" /><i className="screw br" /></>;
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+};
+
+const Topbar = () => (
+  <header className="topbar">
+    <Link to="/" className="brand">
+      <span className="mono-logo">AK</span>
+      <span><b>ARNABH.DEV</b><small>Web design / UX / Development</small></span>
+    </Link>
+    <nav>
+      <a href="/#work" className="pill">Index</a>
+      <a href="/#contact" className="lang">Contact</a>
+    </nav>
+  </header>
+);
+
+const fadeUp = { initial: { opacity: 0, y: 30 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: .15 }, transition: { duration: .6 } };
+
+const Hero = () => (
+  <section className="hero">
+    <h1 className="giant">Design</h1>
+
+    <motion.div className="glass id-card" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, delay: .2 }}>
+      <Screws />
+      <div className="id-top"><b>ARNABH.DEV</b><span>Case study</span></div>
+      <div className="id-main">
+        <div className="avatar"><Photo src="/me.jpg" fallback="AK" /></div>
+        <div>
+          <h2>Arnabh<br />Kushwaha.</h2>
+          <p className="mono">Web developer / UX designer</p>
         </div>
       </div>
-      <div className="social-links">
-        <a href="https://github.com/ZenSensi" target="_blank" className="social-pill interactive"><Github size={24} /> GitHub <ArrowUpRight size={20} /></a>
-        <a href="https://www.linkedin.com/in/arnabhkushwaha/" target="_blank" className="social-pill interactive"><Linkedin size={24} /> LinkedIn <ArrowUpRight size={20} /></a>
-      </div>
+      <div className="id-foot mono"><span>Role <b>UX / UI Design</b></span><span>Build <b>React development</b></span></div>
+    </motion.div>
+
+    <motion.div className="tag-card orange" initial={{ rotate: -12, opacity: 0 }} animate={{ rotate: -5, opacity: 1 }} transition={{ delay: .5 }}>
+      <Screws />
+      <small>Tech stack</small>
+      <b>React</b>
+      <span>TypeScript · Vite · Tailwind<br />Framer Motion · Python · AI</span>
+    </motion.div>
+
+    <motion.div className="tag-card blue" initial={{ rotate: 12, opacity: 0 }} animate={{ rotate: 4, opacity: 1 }} transition={{ delay: .6 }}>
+      <Screws />
+      <small>Projects / 2025—2026</small>
+      <b>Portfolio<br />case studies</b>
+      <span>Hubrave Agency</span>
+    </motion.div>
+
+    <motion.a href="#contact" className="next-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .8 }} whileHover={{ y: -4 }}>
+      <small>Next project?</small>
+      <b>Contact me <ArrowUpRight size={14} /></b>
+    </motion.a>
+
+    <div className="ticket"><i /><b>2025 — 2026</b><span className="barcode" /></div>
+
+    <div className="scope">
+      <h2>Project scope <i className="dot" /></h2>
+      <p>Designing and building fast, AI-ready web products — from first sketch to a live system for clinics, coaching institutes, SaaS teams and startups.</p>
     </div>
   </section>
 );
 
-// Newsletter Section
-interface NewsItem {
-  id: string;
-  date: string;
-  title: string;
-  url: string;
-}
+const Intro = () => (
+  <motion.section className="sec intro" {...fadeUp}>
+    <div>
+      <span className="num">01</span>
+      <h2 className="head">From idea<br />to working<br />product.</h2>
+    </div>
+    <div className="intro-copy">
+      <p><b>Hubrave</b> started as a simple idea. The question was never just how a business should look online, but how its offer, bookings and day-to-day work could live inside the same system.</p>
+      <p>I'm Arnabh — a BCA student in Data Science &amp; AI and the founder of Hubrave. I design the interface, write the code and wire in AI where it actually helps.</p>
+    </div>
+    <div className="devices">
+      <Laptop p={projects[4]} />
+      <Phone p={projects[0]} />
+      <Phone p={projects[2]} />
+    </div>
+  </motion.section>
+);
 
-const Newsletter = () => {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+const blocks = [
+  { k: 'Design system', t: 'Design that\nscales.', flow: ['Figma', 'Tokens', 'Components'], tags: ['color', 'type', 'spacing', 'motion', 'states'], d: 'One source of truth drives every page, card and state across the product.' },
+  { k: 'Frontend', t: 'Fast, modern\nfrontends.', flow: ['React', 'TypeScript', 'Tailwind'], tags: ['vite', 'framer-motion', 'routing', 'seo', 'a11y'], d: 'Responsive interfaces that load fast and feel smooth on every device.' },
+  { k: 'Data / AI', t: 'AI where\nit helps.', flow: ['Data', 'Model', 'Feature'], tags: ['python', 'apis', 'automation', 'ml'], d: 'Data science turned into features people use, not demos that sit on a shelf.' },
+  { k: 'Ship / Operate', t: 'From deploy\nto day two.', flow: ['Build', 'Deploy', 'Monitor'], tags: ['vercel', 'analytics', 'performance'], d: 'Every project goes live, gets measured and keeps getting better.' },
+];
+
+const Block = ({ b, i }: { b: typeof blocks[number]; i: number }) => (
+  <div className={`glass-dark block b${i}`}>
+    <Screws />
+    <div className="block-top"><span className="num light">02.{i + 1}</span><small>{b.k}</small></div>
+    <h3>{b.t.split('\n').map(l => <React.Fragment key={l}>{l}<br /></React.Fragment>)}</h3>
+    <div className="flow">{b.flow.map((f, j) => <React.Fragment key={f}>{j > 0 && <ArrowRight size={11} />}<span>{f}</span></React.Fragment>)}</div>
+    <div className="chips">{b.tags.map(t => <span key={t}>{t}</span>)}</div>
+    <p>{b.d}</p>
+  </div>
+);
+
+const Architecture = () => (
+  <motion.section className="blueprint" {...fadeUp}>
+    <svg className="wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M50 50 H38 V22 H30 M50 50 H62 V22 H70 M50 50 H38 V76 H30 M50 50 H62 V76 H70" fill="none" stroke="rgba(255,255,255,.35)" strokeWidth=".15" />
+    </svg>
+    <div className="bp-grid">
+      <Block b={blocks[0]} i={0} />
+      <div className="glass-dark core">
+        <Screws />
+        <span className="core-label">Core / Hubrave</span>
+        <small>Arnabh / System 01</small>
+        <h3>Core stack</h3>
+        <ul>
+          <li><b>—</b> 8 live projects</li>
+          <li><b>—</b> 6 industries</li>
+          <li><b>—</b> 1 agency founded</li>
+        </ul>
+        <div className="status"><small>Status</small><i /> Connected</div>
+      </div>
+      <Block b={blocks[1]} i={1} />
+      <Block b={blocks[2]} i={2} />
+      <Block b={blocks[3]} i={3} />
+    </div>
+  </motion.section>
+);
+
+const Work = () => (
+  <motion.section className="sec work" id="work" {...fadeUp}>
+    <div className="work-head">
+      <div>
+        <span className="num">03</span>
+        <h2 className="head">Same brand.<br />A better system.</h2>
+      </div>
+      <ul className="work-list">
+        {projects.map(p => <li key={p.title}><i />{p.title}</li>)}
+      </ul>
+    </div>
+    <div className="work-grid">
+      {projects.map((p, i) => (
+        <a key={p.title} href={p.url} target="_blank" rel="noopener noreferrer" className="work-card">
+          <p className="mono"><b>[{pad(i + 1)}] {p.title}</b><br />{p.category}</p>
+          <Laptop p={p} />
+        </a>
+      ))}
+    </div>
+  </motion.section>
+);
+
+const layers = ['Frontend', 'Logic', 'Data', 'Automation'];
+
+const Result = () => (
+  <motion.section className="sec result" {...fadeUp}>
+    <div>
+      <span className="num">04</span>
+      <h2 className="head small">The result isn't<br /><span className="brush">just a new look.</span></h2>
+    </div>
+    <div>
+      <h2 className="head small">It's a system that<br />didn't exist before.</h2>
+      <div className="objective">
+        <Target size={18} />
+        <div><b>Objective reached</b><p>A product that simplifies the owner's work, improves the experience for every user, and keeps growing over time.</p></div>
+      </div>
+    </div>
+    <div className="stack3d" aria-hidden="true">
+      {layers.map((l, i) => (
+        <div key={l} className="layer" style={{ '--i': i } as React.CSSProperties}><i className="plane" /><span>{l}</span></div>
+      ))}
+    </div>
+  </motion.section>
+);
+
+const Footer = () => {
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const body = `${form.message}\n\n— ${form.name} (${form.email})`;
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`New project from ${form.name}`)}&body=${encodeURIComponent(body)}`;
+  };
+
+  return (
+    <footer className="footer" id="contact">
+      <div className="footer-main">
+        <div className="f-id">
+          <div className="f-avatar"><Photo src="/me.jpg" fallback="AK" /></div>
+          <div>
+            <b>Arnabh Kushwaha.</b>
+            <small>Web developer / UX designer</small>
+            <p className="mono">Plan. Organize. Clarify. Build.</p>
+          </div>
+        </div>
+        <div className="f-contact">
+          <a href={`mailto:${CONTACT_EMAIL}`}><small>[E-mail]</small><b>{CONTACT_EMAIL}</b><Mail size={14} /></a>
+          {socials.map(s => (
+            <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"><small>[{s.label}]</small><b>{s.handle}</b>{s.icon}</a>
+          ))}
+        </div>
+        <form className="f-form" onSubmit={submit}>
+          <p className="mono form-title">Open for new projects in 2026</p>
+          <div className="f-row">
+            <label>Name<input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /></label>
+            <label>E-mail<input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /></label>
+          </div>
+          <label>Message<textarea rows={2} required value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} /></label>
+          <button type="submit">Let's build the project <ArrowRight size={14} /></button>
+        </form>
+      </div>
+      <div className="footer-bottom mono">
+        <span>Legal</span><span>2026</span>
+        <Link to="/news">News</Link>
+        <a href="https://hubrave.vercel.app/" target="_blank" rel="noopener noreferrer">Hubrave Agency ↗</a>
+      </div>
+    </footer>
+  );
+};
+
+const Home = () => (
+  <>
+    <title>Arnabh Kushwaha | Portfolio & Digital Architect</title>
+    <meta name="description" content="Portfolio of Arnabh Kushwaha (ZenSensi) - BCA Student in Data Science & AI, Web Developer, UX/UI Designer, and founder of Hubrave Agency. Building modern, high-performance digital products." />
+    <link rel="canonical" href="https://arnabhkushwaha.com/" />
+    <Hero />
+    <Intro />
+    <Architecture />
+    <Work />
+    <Result />
+  </>
+);
+
+interface NewsItem { id: string; date: string; title: string; url: string; }
+
+const NewsPage = () => {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loadingNews, setLoadingNews] = useState(true);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        // Fetching latest AI & Tech news from Hacker News API (Free, Open Source, No Key Required)
-        const response = await fetch('https://hn.algolia.com/api/v1/search_by_date?query=artificial+intelligence&tags=story&hitsPerPage=4');
+        // Latest AI & Tech news from the Hacker News API (free, no key)
+        const response = await fetch('https://hn.algolia.com/api/v1/search_by_date?query=artificial+intelligence&tags=story&hitsPerPage=6');
         const data = await response.json();
-        const formattedNews = data.hits.map((hit: any) => ({
+        setNewsItems(data.hits.map((hit: any) => ({
           id: hit.objectID,
           date: new Date(hit.created_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
           title: hit.title,
           url: hit.url || `https://news.ycombinator.com/item?id=${hit.objectID}`,
-        }));
-        setNewsItems(formattedNews);
+        })));
       } catch (error) {
         console.error("Failed to fetch news", error);
       } finally {
         setLoadingNews(false);
       }
     };
-
     fetchNews();
   }, []);
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setSubscribed(true);
-      setEmail('');
-      setTimeout(() => setSubscribed(false), 3000);
-    }
-  };
-
   return (
-    <section id="news" className="section-padding container">
-      <div style={{ marginBottom: '4rem', paddingBottom: '2rem', borderBottom: '1px solid rgba(0,0,0,0.1)', textAlign: 'center' }}>
-        <h1 className="outfit" style={{ fontSize: 'clamp(4rem, 8vw, 6rem)', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, lineHeight: 1 }}>NEWS</h1>
+    <section className="sec news">
+      <title>Latest Tech & AI News | Arnabh Kushwaha</title>
+      <meta name="description" content="Stay updated with the latest trends in Artificial Intelligence, machine learning, and software engineering, curated by Arnabh Kushwaha." />
+      <link rel="canonical" href="https://arnabhkushwaha.com/news" />
+      <div>
+        <span className="num">AI</span>
+        <h1 className="head">Latest<br />news.</h1>
       </div>
-      <div className="newsletter-grid">
-        <div className="news-content">
-          <p className="outfit section-subtitle">Daily Updates</p>
-          <h2 className="outfit section-title">Latest AI & Tech News</h2>
-          <div className="news-list">
-            {loadingNews ? (
-              <p>Loading latest news...</p>
-            ) : (
-              newsItems.map((news) => (
-                <a href={news.url} target="_blank" rel="noopener noreferrer" key={news.id} className="news-item block interactive" style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <span className="news-date">{news.date}</span>
-                  <h3 className="news-title flex items-center gap-2" style={{ marginTop: '0.5rem', marginBottom: '0' }}>
-                    {news.title} <ArrowUpRight size={16} />
-                  </h3>
-                </a>
-              ))
-            )}
-          </div>
-        </div>
-
-        <div className="subscribe-box glass">
-          <h3 className="outfit">Stay Updated</h3>
-          <p>Subscribe to the newsletter to get daily news, articles, and product updates delivered straight to your inbox.</p>
-          <form onSubmit={handleSubscribe} className="subscribe-form">
-            <input
-              type="email"
-              placeholder="Your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="subscribe-input interactive"
-            />
-            <button type="submit" className="subscribe-btn interactive">
-              {subscribed ? 'Subscribed!' : 'Subscribe'}
-            </button>
-          </form>
-          {subscribed && <p className="success-msg">Thank you! You're now subscribed to the newsletter.</p>}
-        </div>
+      <div className="news-list">
+        {loadingNews ? <p className="mono">Loading latest news...</p> : newsItems.map(n => (
+          <a key={n.id} href={n.url} target="_blank" rel="noopener noreferrer" className="news-item">
+            <small className="mono">{n.date}</small>
+            <span>{n.title} <ArrowUpRight size={14} /></span>
+          </a>
+        ))}
       </div>
     </section>
   );
 };
-
-// Footer
-const Footer = () => (
-  <footer className="footer container">
-    <div className="footer-content">
-      <div className="outfit footer-logo">AK.</div>
-      <p>&copy; 2026 Arnabh Kushwaha. Built with Skills.</p>
-    </div>
-  </footer>
-);
-
-// FAQ Component for SEO/AEO Rich Snippets & Interactive Q&A
-const faqs = [
-  {
-    question: "Who is Arnabh Kushwaha (ZenSensi)?",
-    answer: "Arnabh Kushwaha (also known as ZenSensi) is a digital architect, web developer, and UX designer who specializes in building premium, high-performance web applications. He is currently pursuing a BCA in Data Science & Artificial Intelligence, combining analytical data capabilities with aesthetic user experiences. He is the founder of Hubrave Agency."
-  },
-  {
-    question: "What is Hubrave Agency?",
-    answer: "Hubrave Agency is a tech-driven digital product agency founded by Arnabh Kushwaha. The agency's focus is bridging the gap between Data Science, AI integration, and premium UX/UI. Hubrave builds and optimizes custom web products, SaaS platforms, and digital solutions for clients globally."
-  },
-  {
-    question: "What technologies does Arnabh Kushwaha specialize in?",
-    answer: "Arnabh specializes in advanced frontend engineering using React (version 19), TypeScript, and Vite. He builds responsive design systems and interactions using Tailwind CSS and Framer Motion. He also integrates backend automations and Data Science/AI pipelines into his projects."
-  },
-  {
-    question: "What digital products has Arnabh Kushwaha built?",
-    answer: "Arnabh has designed and developed multiple live digital products, including We Care Dental Clinic (an AI diagnostics tool for healthcare), Calmorithm (a tech wellness platform), Attendixx (a SaaS attendance tracker), Hirok Labs (DevOps pipelines), PyPrac4U (an educational platform for Python), and next-generation coaching school software."
-  }
-];
-
-const FAQ = () => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  const toggleFAQ = (index: number) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
-
-  return (
-    <section id="faq" className="section-padding container faq-section">
-      <div className="section-header">
-        <p className="outfit section-subtitle">Questions & Answers</p>
-        <h2 className="outfit section-title">FAQ & Credentials</h2>
-      </div>
-      <div className="faq-list">
-        {faqs.map((faq, index) => {
-          const isOpen = activeIndex === index;
-          return (
-            <div key={index} className="faq-item glass">
-              <button
-                className="faq-question outfit interactive"
-                onClick={() => toggleFAQ(index)}
-                aria-expanded={isOpen}
-              >
-                <span>{faq.question}</span>
-                <span className={`faq-icon ${isOpen ? 'open' : ''}`}>+</span>
-              </button>
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="faq-answer-wrapper"
-                    style={{ overflow: 'hidden' }}
-                  >
-                    <div className="faq-answer">
-                      <p>{faq.answer}</p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          );
-        })}
-      </div>
-    </section>
-  );
-};
-
-const Home = () => (
-  <>
-    {/* React 19 Metadata Hoisting */}
-    <title>Arnabh Kushwaha | Portfolio & Digital Architect</title>
-    <meta name="description" content="Portfolio of Arnabh Kushwaha (ZenSensi) - BCA Student in Data Science & AI, Web Developer, UX/UI Designer, and founder of Hubrave Agency. Building modern, high-performance digital products." />
-    <link rel="canonical" href="https://arnabhkushwaha.com/" />
-    
-    <Hero />
-    <HubraveSection />
-    <Projects />
-    <About />
-    <FAQ />
-  </>
-);
-
-const NewsPage = () => (
-  <div style={{ paddingTop: '50px', minHeight: '80vh' }}>
-    {/* React 19 Metadata Hoisting */}
-    <title>Latest Tech & AI News | Arnabh Kushwaha</title>
-    <meta name="description" content="Stay updated with the latest trends in Artificial Intelligence, machine learning, and software engineering, curated by Arnabh Kushwaha." />
-    <link rel="canonical" href="https://arnabhkushwaha.com/news" />
-    
-    <Newsletter />
-  </div>
-);
-
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Artificial delay to show the beautiful loader
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <AnimatePresence mode="wait">
-      {isLoading ? (
-        <motion.div
-          key="loader"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#FEF7F0]"
-        >
-          <Loader />
-        </motion.div>
-      ) : (
-        <motion.div
-          key="content"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="app"
-        >
-          <CustomCursor />
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/news" element={<NewsPage />} />
-          </Routes>
-          <Footer />
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <>
+      <ScrollToTop />
+      <Topbar />
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+      <Footer />
+    </>
   );
 }
 
