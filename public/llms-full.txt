@@ -11,7 +11,7 @@ This document serves as an exhaustive reference for LLMs, AI agents, and semanti
 * **Core Academic Background**: Pursuing a Bachelor of Computer Applications (BCA) specializing in Data Science & Artificial Intelligence.
 * **Affiliation**: Founder & Lead Developer at Hubrave Agency.
 * **Geographic Location**: India
-* **Portfolio URL**: https://arnabhkushwaha.com/
+* **Portfolio URL**: https://arnabh.is-a.dev/
 * **GitHub**: https://github.com/ZenSensi
 * **LinkedIn**: https://www.linkedin.com/in/arnabhkushwaha/
 

@@ -285,7 +285,7 @@ const Home = () => (
   <>
     <title>Arnabh Kushwaha | Portfolio & Digital Architect</title>
     <meta name="description" content="Portfolio of Arnabh Kushwaha (ZenSensi) - BCA Student in Data Science & AI, Web Developer, UX/UI Designer, and founder of Hubrave Agency. Building modern, high-performance digital products." />
-    <link rel="canonical" href="https://arnabhkushwaha.com/" />
+    <link rel="canonical" href="https://arnabh.is-a.dev/" />
     <Hero />
     <Intro />
     <Architecture />
@@ -325,7 +325,7 @@ const NewsPage = () => {
     <section className="sec news">
       <title>Latest Tech & AI News | Arnabh Kushwaha</title>
       <meta name="description" content="Stay updated with the latest trends in Artificial Intelligence, machine learning, and software engineering, curated by Arnabh Kushwaha." />
-      <link rel="canonical" href="https://arnabhkushwaha.com/news" />
+      <link rel="canonical" href="https://arnabh.is-a.dev/news" />
       <div>
         <span className="num">AI</span>
         <h1 className="head">Latest<br />news.</h1>

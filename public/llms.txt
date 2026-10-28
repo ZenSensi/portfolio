@@ -4,7 +4,7 @@ Arnabh Kushwaha (aka ZenSensi) is a digital architect, software engineer, and st
 
 ## Technical Details & Resources
 - **[Full Technical Reference & Project Details](/llms-full.txt)** - Deep technical specification of all projects and systems.
-- **Website**: https://arnabhkushwaha.com
+- **Website**: https://arnabh.is-a.dev
 - **LinkedIn**: https://www.linkedin.com/in/arnabhkushwaha/
 - **GitHub**: https://github.com/ZenSensi
 - **Agency (Hubrave)**: https://hubrave.vercel.app/

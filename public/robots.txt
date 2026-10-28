@@ -29,4 +29,4 @@ User-agent: Anthropic-AI
 Allow: /
 
 # XML Sitemap Location
-Sitemap: https://arnabhkushwaha.com/sitemap.xml
+Sitemap: https://arnabh.is-a.dev/sitemap.xml
