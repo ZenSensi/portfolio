@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, MotionConfig, type Variants, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Mail, Plus, Target } from 'lucide-react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import './App.css';
@@ -37,7 +37,7 @@ const projects: { title: string; url: string; category: string; image?: string }
 const pad = (n: number) => String(n).padStart(2, '0');
 
 // Photo with a graceful fallback: drop an image at public/<src> and it shows up
-const Photo = ({ src, fallback }: { src: string; fallback: string }) => {
+const Photo = ({ src, fallback, alt = '' }: { src: string; fallback: string; alt?: string }) => {
   const img = useRef<HTMLImageElement>(null);
   const hide = () => { if (img.current) img.current.style.display = 'none'; };
   // Prerendered images can fail before React attaches onError, so also check once mounted
@@ -45,7 +45,7 @@ const Photo = ({ src, fallback }: { src: string; fallback: string }) => {
   return (
     <div className="photo">
       <span>{fallback}</span>
-      <img ref={img} src={src} alt="" onError={hide} />
+      <img ref={img} src={src} alt={alt} onError={hide} />
     </div>
   );
 };
@@ -59,15 +59,15 @@ const Preview = ({ url, title, image, mobile = false }: { url: string; title: st
   </div>
 );
 
-const Laptop = ({ p }: { p: typeof projects[number] }) => (
-  <div className="laptop">
+const Laptop = ({ p, variants }: { p: typeof projects[number]; variants?: Variants }) => (
+  <motion.div className="laptop" variants={variants}>
     <div className="laptop-screen"><Preview url={p.url} title={p.title} image={p.image} /></div>
     <div className="laptop-base" />
-  </div>
+  </motion.div>
 );
 
-const Phone = ({ p }: { p: typeof projects[number] }) => (
-  <div className="phone"><Preview url={p.url} title={p.title} mobile /></div>
+const Phone = ({ p, variants }: { p: typeof projects[number]; variants?: Variants }) => (
+  <motion.div className="phone" variants={variants}><Preview url={p.url} title={p.title} mobile /></motion.div>
 );
 
 const Screws = () => <><i className="screw tl" /><i className="screw tr" /><i className="screw bl" /><i className="screw br" /></>;
@@ -79,7 +79,7 @@ const ScrollToTop = () => {
 };
 
 const Topbar = () => (
-  <header className="topbar">
+  <motion.header className="topbar" initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: .7, ease }}>
     <Link to="/" className="brand">
       <span className="mono-logo">AK</span>
       <span><b>ARNABH.DEV</b><small>Web design / UX / Development</small></span>
@@ -88,71 +88,119 @@ const Topbar = () => (
       <a href="/#work" className="pill">Index</a>
       <a href="/#contact" className="lang">Contact</a>
     </nav>
-  </header>
+  </motion.header>
 );
 
-const fadeUp = { initial: { opacity: 0, y: 30 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: .15 }, transition: { duration: .6 } };
+const ease = [0.16, 1, 0.3, 1] as const;
+const stagger: Variants = { hidden: {}, show: { transition: { staggerChildren: .1, delayChildren: .05 } } };
+const rise: Variants = { hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: .9, ease } } };
+const pop: Variants = { hidden: { opacity: 0, y: 40, scale: .96 }, show: { opacity: 1, y: 0, scale: 1, transition: { duration: .8, ease } } };
+// Spread on a section: children with variants animate in, staggered, the first time it scrolls into view
+const inView = { initial: 'hidden', whileInView: 'show', viewport: { once: true, amount: .15 }, variants: stagger } as const;
 
-const Hero = () => (
-  <section className="hero">
-    <p className="giant" aria-hidden="true">Design</p>
+// Heading whose lines slide up from behind a mask
+const Lines = ({ lines, className }: { lines: React.ReactNode[]; className: string }) => (
+  <h2 className={className}>
+    {lines.map((l, i) => (
+      <span key={i} className="line-mask">
+        <motion.span className="line" variants={{ hidden: { y: '110%' }, show: { y: 0, transition: { duration: 1, ease, delay: i * .08 } } }}>{l}</motion.span>
+      </span>
+    ))}
+  </h2>
+);
 
-    <motion.div className="glass id-card" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, delay: .2 }}>
-      <Screws />
-      <div className="id-top"><b>ARNABH.DEV</b><span>Case study</span></div>
-      <div className="id-main">
-        <div className="avatar"><Photo src="/me.jpg" fallback="AK" /></div>
-        <div>
-          <h1>Arnabh{' '}<br />Kushwaha.<span className="sr-only"> (ZenSensi) — Web Developer &amp; UX/UI Designer, Founder of Hubrave</span></h1>
-          <p className="mono">Web developer / UX designer</p>
+const Hero = () => {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+  const wordY = useTransform(scrollYProgress, [0, 1], [0, 140]);
+  const cardY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const orangeY = useTransform(scrollYProgress, [0, 1], [0, -170]);
+  const blueY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+
+  // ID card tilts toward the pointer
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotateX = useSpring(useTransform(my, [-.5, .5], [7, -7]), { stiffness: 150, damping: 18 });
+  const rotateY = useSpring(useTransform(mx, [-.5, .5], [-9, 9]), { stiffness: 150, damping: 18 });
+  const onMove = (e: React.PointerEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - r.left) / r.width - .5);
+    my.set((e.clientY - r.top) / r.height - .5);
+  };
+  const reset = () => { mx.set(0); my.set(0); };
+
+  return (
+    <section className="hero" ref={ref} onPointerMove={onMove} onPointerLeave={reset}>
+      <motion.p className="giant" aria-hidden="true" style={{ y: wordY }}>
+        {'Design'.split('').map((c, i) => (
+          <motion.span key={i} initial={{ y: '40%', opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1.1, ease, delay: i * .06 }}>{c}</motion.span>
+        ))}
+      </motion.p>
+
+      <motion.div className="glass id-card" style={{ y: cardY, rotateX, rotateY, transformPerspective: 1000 }}
+        initial={{ opacity: 0, scale: .92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .9, ease, delay: .35 }}>
+        <Screws />
+        <div className="id-top"><b>ARNABH.DEV</b><span>Case study</span></div>
+        <div className="id-main">
+          <div className="avatar"><Photo src="/me.jpg" fallback="AK" alt="Arnabh Kushwaha" /></div>
+          <div>
+            <h1>Arnabh{' '}<br />Kushwaha.<span className="sr-only"> (ZenSensi) — Web Developer &amp; UX/UI Designer, Founder of Hubrave</span></h1>
+            <p className="mono">Web developer / UX designer</p>
+          </div>
         </div>
-      </div>
-      <div className="id-foot mono"><span>Role <b>UX / UI Design</b></span><span>Build <b>React development</b></span></div>
-    </motion.div>
+        <div className="id-foot mono"><span>Role <b>UX / UI Design</b></span><span>Build <b>React development</b></span></div>
+      </motion.div>
 
-    <motion.div className="tag-card orange" initial={{ rotate: -12, opacity: 0 }} animate={{ rotate: -5, opacity: 1 }} transition={{ delay: .5 }}>
-      <Screws />
-      <small>Tech stack</small>
-      <b>React</b>
-      <span>TypeScript · Vite · Tailwind<br />Framer Motion · Python · AI</span>
-    </motion.div>
+      <motion.div className="tag-card orange" style={{ y: orangeY }} initial={{ rotate: -16, opacity: 0, x: -50 }} animate={{ rotate: -5, opacity: 1, x: 0 }}
+        transition={{ type: 'spring', stiffness: 110, damping: 13, delay: .7 }} whileHover={{ rotate: -2, scale: 1.04 }}>
+        <Screws />
+        <small>Tech stack</small>
+        <b>React</b>
+        <span>TypeScript · Vite · Tailwind<br />Framer Motion · Python · AI</span>
+      </motion.div>
 
-    <motion.div className="tag-card blue" initial={{ rotate: 12, opacity: 0 }} animate={{ rotate: 4, opacity: 1 }} transition={{ delay: .6 }}>
-      <Screws />
-      <small>Projects / 2025—2026</small>
-      <b>Portfolio<br />case studies</b>
-      <span>Hubrave Agency</span>
-    </motion.div>
+      <motion.div className="tag-card blue" style={{ y: blueY }} initial={{ rotate: 16, opacity: 0, x: 50 }} animate={{ rotate: 4, opacity: 1, x: 0 }}
+        transition={{ type: 'spring', stiffness: 110, damping: 13, delay: .85 }} whileHover={{ rotate: 1, scale: 1.04 }}>
+        <Screws />
+        <small>Projects / 2025—2026</small>
+        <b>Portfolio<br />case studies</b>
+        <span>Hubrave Agency</span>
+      </motion.div>
 
-    <motion.a href="#contact" className="next-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .8 }} whileHover={{ y: -4 }}>
-      <small>Next project?</small>
-      <b>Contact me <ArrowUpRight size={14} /></b>
-    </motion.a>
+      <motion.a href="#contact" className="next-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, ease, delay: 1 }}
+        whileHover={{ y: -4, scale: 1.03 }} whileTap={{ scale: .97 }}>
+        <small>Next project?</small>
+        <b>Contact me <ArrowUpRight size={14} /></b>
+      </motion.a>
 
-    <div className="ticket"><i /><b>2025 — 2026</b><span className="barcode" /></div>
+      <motion.div className="ticket" initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, -8, 0] }}
+        transition={{ opacity: { delay: 1.1, duration: .6 }, y: { duration: 4, repeat: Infinity, ease: 'easeInOut' } }}>
+        <i /><b>2025 — 2026</b><span className="barcode" />
+      </motion.div>
 
-    <div className="scope">
-      <h2>Project scope <i className="dot" /></h2>
-      <p>Designing and building fast, AI-ready web products — from first sketch to a live system for clinics, coaching institutes, SaaS teams and startups.</p>
-    </div>
-  </section>
-);
+      <motion.div className="scope" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, ease, delay: .9 }}>
+        <h2>Project scope <i className="dot" /></h2>
+        <p>Designing and building fast, AI-ready web products — from first sketch to a live system for clinics, coaching institutes, SaaS teams and startups.</p>
+      </motion.div>
+    </section>
+  );
+};
 
 const Intro = () => (
-  <motion.section className="sec intro" {...fadeUp}>
-    <div>
+  <motion.section className="sec intro" {...inView}>
+    <motion.div variants={rise}>
       <span className="num">01</span>
-      <h2 className="head">From idea<br />to working<br />product.</h2>
-    </div>
-    <div className="intro-copy">
+      <Lines className="head" lines={['From idea', 'to working', 'product.']} />
+    </motion.div>
+    <motion.div className="intro-copy" variants={rise}>
       <p><b>Hubrave</b> started as a simple idea. The question was never just how a business should look online, but how its offer, bookings and day-to-day work could live inside the same system.</p>
       <p>I'm Arnabh — a BCA student in Data Science &amp; AI and the founder of Hubrave. I design the interface, write the code and wire in AI where it actually helps.</p>
-    </div>
-    <div className="devices">
-      <Laptop p={projects[4]} />
-      <Phone p={projects[0]} />
-      <Phone p={projects[2]} />
-    </div>
+    </motion.div>
+    <motion.div className="devices" variants={stagger}>
+      <Laptop p={projects[4]} variants={{ hidden: { opacity: 0, x: 80 }, show: { opacity: 1, x: 0, transition: { duration: 1, ease } } }} />
+      <Phone p={projects[0]} variants={{ hidden: { opacity: 0, y: 80, rotate: 8 }, show: { opacity: 1, y: 0, rotate: 0, transition: { type: 'spring', stiffness: 90, damping: 14 } } }} />
+      <Phone p={projects[2]} variants={{ hidden: { opacity: 0, y: 80, rotate: -8 }, show: { opacity: 1, y: 0, rotate: 0, transition: { type: 'spring', stiffness: 90, damping: 14 } } }} />
+    </motion.div>
   </motion.section>
 );
 
@@ -164,24 +212,25 @@ const blocks = [
 ];
 
 const Block = ({ b, i }: { b: typeof blocks[number]; i: number }) => (
-  <div className={`glass-dark block b${i}`}>
+  <motion.div className={`glass-dark block b${i}`} variants={pop} whileHover={{ y: -6 }}>
     <Screws />
     <div className="block-top"><span className="num light">02.{i + 1}</span><small>{b.k}</small></div>
     <h3>{b.t.split('\n').map(l => <React.Fragment key={l}>{l}<br /></React.Fragment>)}</h3>
     <div className="flow">{b.flow.map((f, j) => <React.Fragment key={f}>{j > 0 && <ArrowRight size={11} />}<span>{f}</span></React.Fragment>)}</div>
     <div className="chips">{b.tags.map(t => <span key={t}>{t}</span>)}</div>
     <p>{b.d}</p>
-  </div>
+  </motion.div>
 );
 
 const Architecture = () => (
-  <motion.section className="blueprint" {...fadeUp}>
+  <motion.section className="blueprint" {...inView}>
     <svg className="wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M50 50 H38 V22 H30 M50 50 H62 V22 H70 M50 50 H38 V76 H30 M50 50 H62 V76 H70" fill="none" stroke="rgba(255,255,255,.35)" strokeWidth=".15" />
+      <motion.path d="M50 50 H38 V22 H30 M50 50 H62 V22 H70 M50 50 H38 V76 H30 M50 50 H62 V76 H70" fill="none" stroke="rgba(255,255,255,.35)" strokeWidth=".15"
+        variants={{ hidden: { pathLength: 0 }, show: { pathLength: 1, transition: { duration: 1.6, ease: 'easeInOut', delay: .4 } } }} />
     </svg>
     <div className="bp-grid">
       <Block b={blocks[0]} i={0} />
-      <div className="glass-dark core">
+      <motion.div className="glass-dark core" variants={pop}>
         <Screws />
         <span className="core-label">Core / Hubrave</span>
         <small>Arnabh / System 01</small>
@@ -192,7 +241,7 @@ const Architecture = () => (
           <li><b>—</b> 1 agency founded</li>
         </ul>
         <div className="status"><small>Status</small><i /> Connected</div>
-      </div>
+      </motion.div>
       <Block b={blocks[1]} i={1} />
       <Block b={blocks[2]} i={2} />
       <Block b={blocks[3]} i={3} />
@@ -201,47 +250,52 @@ const Architecture = () => (
 );
 
 const Work = () => (
-  <motion.section className="sec work" id="work" {...fadeUp}>
+  <motion.section className="sec work" id="work" {...inView}>
     <div className="work-head">
-      <div>
+      <motion.div variants={rise}>
         <span className="num">03</span>
-        <h2 className="head">Same brand.<br />A better system.</h2>
-      </div>
-      <ul className="work-list">
-        {projects.map(p => <li key={p.title}><i />{p.title}</li>)}
-      </ul>
+        <Lines className="head" lines={['Same brand.', 'A better system.']} />
+      </motion.div>
+      <motion.ul className="work-list" variants={stagger}>
+        {projects.map(p => <motion.li key={p.title} variants={{ hidden: { opacity: 0, x: 20 }, show: { opacity: 1, x: 0 } }}><i />{p.title}</motion.li>)}
+      </motion.ul>
     </div>
-    <div className="work-grid">
+    <motion.div className="work-grid" variants={stagger}>
       {projects.map((p, i) => (
-        <a key={p.title} href={p.url} target="_blank" rel="noopener noreferrer" className="work-card">
+        <motion.a key={p.title} href={p.url} target="_blank" rel="noopener noreferrer" className="work-card" variants={rise} whileHover={{ y: -8 }}>
           <p className="mono"><b>[{pad(i + 1)}] {p.title}</b><br />{p.category}</p>
           <Laptop p={p} />
-        </a>
+        </motion.a>
       ))}
-    </div>
+    </motion.div>
   </motion.section>
 );
 
 const layers = ['Frontend', 'Logic', 'Data', 'Automation'];
 
 const Result = () => (
-  <motion.section className="sec result" {...fadeUp}>
-    <div>
+  <motion.section className="sec result" {...inView}>
+    <motion.div variants={rise}>
       <span className="num">04</span>
-      <h2 className="head small">The result isn't<br /><span className="brush">just a new look.</span></h2>
-    </div>
-    <div>
-      <h2 className="head small">It's a system that<br />didn't exist before.</h2>
+      <Lines className="head small" lines={["The result isn't", (
+        <span className="brush">just a new look.<motion.i variants={{ hidden: { scaleX: 0 }, show: { scaleX: 1, transition: { duration: .8, ease, delay: .7 } } }} /></span>
+      )]} />
+    </motion.div>
+    <motion.div variants={rise}>
+      <Lines className="head small" lines={["It's a system that", "didn't exist before."]} />
       <div className="objective">
         <Target size={18} />
         <div><b>Objective reached</b><p>A product that simplifies the owner's work, improves the experience for every user, and keeps growing over time.</p></div>
       </div>
-    </div>
-    <div className="stack3d" aria-hidden="true">
+    </motion.div>
+    <motion.div className="stack3d" aria-hidden="true" variants={stagger}>
       {layers.map((l, i) => (
-        <div key={l} className="layer" style={{ '--i': i } as React.CSSProperties}><i className="plane" /><span>{l}</span></div>
+        <motion.div key={l} className="layer" style={{ '--i': i } as React.CSSProperties}
+          variants={{ hidden: { opacity: 0, y: -50 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 90, damping: 12 } } }}>
+          <i className="plane" /><span>{l}</span>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   </motion.section>
 );
 
@@ -255,19 +309,19 @@ const faqs = [
 ];
 
 const FAQ = () => (
-  <motion.section className="sec faq" id="faq" {...fadeUp}>
-    <div>
+  <motion.section className="sec faq" id="faq" {...inView}>
+    <motion.div variants={rise}>
       <span className="num">05</span>
-      <h2 className="head small">Questions,<br />answered.</h2>
-    </div>
-    <div className="faq-list">
+      <Lines className="head small" lines={['Questions,', 'answered.']} />
+    </motion.div>
+    <motion.div className="faq-list" variants={stagger}>
       {faqs.map(f => (
-        <details key={f.q}>
+        <motion.details key={f.q} variants={rise}>
           <summary><h3>{f.q}</h3><Plus size={16} /></summary>
           <p>{f.a}</p>
-        </details>
+        </motion.details>
       ))}
-    </div>
+    </motion.div>
   </motion.section>
 );
 
@@ -285,7 +339,7 @@ const homeSchema = {
       inLanguage: 'en', dateModified: '2026-10-29', mainEntity: person, isPartOf: { '@id': `${SITE}/#website` },
     },
     {
-      '@type': 'Person', ...person, name: 'Arnabh Kushwaha', alternateName: 'ZenSensi', url: `${SITE}/`, image: `${SITE}/og.png`,
+      '@type': 'Person', ...person, name: 'Arnabh Kushwaha', alternateName: 'ZenSensi', url: `${SITE}/`, image: `${SITE}/me.jpg`,
       email: `mailto:${CONTACT_EMAIL}`, jobTitle: 'Web Developer & UX/UI Designer',
       description: faqs[0].a, address: { '@type': 'PostalAddress', addressCountry: 'IN' },
       worksFor: { '@id': `${HUBRAVE}#organization` },
@@ -320,38 +374,38 @@ const Footer = () => {
   };
 
   return (
-    <footer className="footer" id="contact">
+    <motion.footer className="footer" id="contact" {...inView}>
       <div className="footer-main">
-        <div className="f-id">
-          <div className="f-avatar"><Photo src="/me.jpg" fallback="AK" /></div>
+        <motion.div className="f-id" variants={rise}>
+          <motion.div className="f-avatar" whileHover={{ scale: 1.06, rotate: -3 }}><Photo src="/me.jpg" fallback="AK" alt="Arnabh Kushwaha" /></motion.div>
           <div>
             <b>Arnabh Kushwaha.</b>
             <small>Web developer / UX designer</small>
             <p className="mono">Plan. Organize. Clarify. Build.</p>
           </div>
-        </div>
-        <div className="f-contact">
+        </motion.div>
+        <motion.div className="f-contact" variants={rise}>
           <a href={`mailto:${CONTACT_EMAIL}`}><small>[E-mail]</small><b>{CONTACT_EMAIL}</b><Mail size={14} /></a>
           {socials.map(s => (
             <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"><small>[{s.label}]</small><b>{s.handle}</b>{s.icon}</a>
           ))}
-        </div>
-        <form className="f-form" onSubmit={submit}>
+        </motion.div>
+        <motion.form className="f-form" onSubmit={submit} variants={rise}>
           <p className="mono form-title">Open for new projects in 2026</p>
           <div className="f-row">
             <label>Name<input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /></label>
             <label>E-mail<input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /></label>
           </div>
           <label>Message<textarea rows={2} required value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} /></label>
-          <button type="submit">Let's build the project <ArrowRight size={14} /></button>
-        </form>
+          <motion.button type="submit" whileHover={{ scale: 1.02 }} whileTap={{ scale: .97 }}>Let's build the project <ArrowRight size={14} /></motion.button>
+        </motion.form>
       </div>
       <div className="footer-bottom mono">
         <span>Legal</span><span>2026</span>
         <Link to="/news">News</Link>
         <a href={HUBRAVE} target="_blank" rel="noopener noreferrer">Hubrave Agency ↗</a>
       </div>
-    </footer>
+    </motion.footer>
   );
 };
 
@@ -418,10 +472,19 @@ const NewsPage = () => {
   );
 };
 
+// Thin orange bar across the top that tracks page scroll
+const ScrollProgress = () => {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: .001 });
+  return <motion.div className="progress" style={{ scaleX }} aria-hidden="true" />;
+};
+
 function App() {
   return (
-    <>
+    // reducedMotion="user": transforms are skipped when the OS "reduce motion" setting is on
+    <MotionConfig reducedMotion="user">
       <ScrollToTop />
+      <ScrollProgress />
       <Topbar />
       <main>
         <Routes>
@@ -431,7 +494,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-    </>
+    </MotionConfig>
   );
 }
 
